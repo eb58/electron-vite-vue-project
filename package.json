@@ -22,10 +22,13 @@
     "build": "vue-tsc --noEmit && vite build && electron-builder",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "winax": "^3.3.6"
+  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
-    "electron": "^24.1.2",
-    "electron-builder": "^23.6.0",
+    "electron": "^15.5.7",
+    "electron-builder": "^24.2.1",
     "typescript": "^5.0.2",
     "vite": "^4.1.4",
     "vite-plugin-electron": "^0.11.2",

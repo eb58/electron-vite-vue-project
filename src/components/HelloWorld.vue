@@ -2,10 +2,12 @@
 // const ffi = require("ffi-napi");
 // const ref = require("ref-napi");
 
+//const winax = require("./winax/winax-for-electron-15.5.7/winax");
+//const winax = require("./winax/winax-for-electron-16.2.8/winax");
 //const winax = require("./winax/winax-for-electron-17.4.11/winax");
 //const winax = require("./winax/winax-for-electron-22.3.6/winax");
-const winax = require("./winax/winax-for-electron-24.1.2/winax");
-//const winax = require("winax");
+// const winax = require("./winax/winax-for-electron-24.1.2/winax");
+const winax = require("winax");
 
 // console.log("WINAX", winax);
 // console.log("REF", ref);
