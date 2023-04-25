@@ -23,11 +23,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "ref-napi": "^3.0.3",
+    "ffi-napi": "^4.0.3",
     "winax": "^3.3.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
-    "electron": "^15.5.7",
+    "electron": "^16.2.8",
     "electron-builder": "^24.2.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.1",
