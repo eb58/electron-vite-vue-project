@@ -2,6 +2,7 @@ node -v  # v16.20.0
 
 npm rebuild winax --runtime=electron --target=12.22.0 --dist-url=https://electronjs.org/headers --build-from-source
 
+npm rebuild winax --runtime=electron --target=14.2.9  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=15.5.7  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=16.2.8  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=17.4.11 --dist-url=https://electronjs.org/headers --build-from-source
