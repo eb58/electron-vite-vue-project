@@ -8,8 +8,7 @@ npm rebuild winax --runtime=electron --target=15.5.7  --dist-url=https://electro
 npm rebuild winax --runtime=electron --target=16.2.8  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=17.4.11 --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=18.3.15 --dist-url=https://electronjs.org/headers --build-from-source
-npm rebuild winax --runtime=electron --target=19.1.9  --dist-url=https://electronjs.org/headers --build-from-source
-npm rebuild winax --runtime=electron --target=20.3.12 --dist-url=https://electronjs.org/headers --build-from-source
+npm rebuild winax --runtime=electron --target=20.3.8  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=22.3.6  --dist-url=https://electronjs.org/headers --build-from-source
 
 
