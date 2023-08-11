@@ -5,10 +5,11 @@ const ffi = require("ffi-napi");
 const voidPtr = ref.refType(ref.types.void);
 const stringPtr = ref.refType(ref.types.CString);
 
-const winax = require("./winax/winax-for-electron-16.2.8/winax");
+// const winax = require("./winax/winax-for-electron-16.2.8/winax");
 // const winax = require("./winax/winax-for-electron-15.5.7/winax");
-//const winax = require("./winax/winax-for-electron-17.4.11/winax");
-//const winax = require("./winax/winax-for-electron-22.3.6/winax");
+// const winax = require("./winax/winax-for-electron-17.4.11/winax");
+const winax = require("./winax/winax-for-electron-18.3.15/winax");
+// const winax = require("./winax/winax-for-electron-22.3.6/winax");
 // const winax = require("./winax/winax-for-electron-24.1.2/winax");
 // const winax = require("winax");
 
@@ -55,7 +56,7 @@ export default {
             }
         },
         testWinax() {
-            // const app = new winax.Object("Word.Application"); app.visible = true;
+            const app = new winax.Object("Word.Application"); app.visible = true;
             const x = findWindow("neu 1 - Notepad++");
             console.log( x );
         },
