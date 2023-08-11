@@ -8,10 +8,11 @@ const stringPtr = ref.refType(ref.types.CString);
 // const winax = require("./winax/winax-for-electron-16.2.8/winax");
 // const winax = require("./winax/winax-for-electron-15.5.7/winax");
 // const winax = require("./winax/winax-for-electron-17.4.11/winax");
-const winax = require("./winax/winax-for-electron-18.3.15/winax");
-// const winax = require("./winax/winax-for-electron-22.3.6/winax");
-// const winax = require("./winax/winax-for-electron-24.1.2/winax");
-// const winax = require("winax");
+// const winax = require("./winax/winax-for-electron-18.3.15/winax");
+const winax = require("./winax/winax-for-electron-20.3.8/winax");
+// geht nicht !!! const winax = require("./winax/winax-for-electron-22.3.6/winax"); 
+// geht nicht !!! const winax = require("./winax/winax-for-electron-24.1.2/winax");
+//const winax = require("winax");
 
 const user32 = ffi.Library("user32.dll", {
     EnumWindows: ["bool", [voidPtr, "int32"]],
