@@ -1,6 +1,17 @@
 <script lang="ts">
+import { WD } from "../wordConsts"
+const path = require('path');
 
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
+const range = (n: number) => [...Array(n).keys()]
+const toArray = (objlist: any) => {
+    const res = [];
+    for (let i = 1; i <= objlist.Count; i++) {
+        res.push(objlist.Item(i));
+    }
+    return res;
+}
+
 
 /*
 const ref = require("ref-napi");
@@ -53,34 +64,74 @@ const buf = Buffer.alloc(255, " ");
 */
 // console.log("WINAX", winax, ffi, ref, user32);
 
+
+
+const path1 = path.resolve("test-data", "test-doc1.docx");
+const path2 = path.resolve("test-data", "test-doc2.docx");
+
+try { execSync("taskkill /f /im WINWORD.exe") } catch (e) { }
+const app = new winax.Object("Word.Application");
+app.visible = true;
+
+
 export default {
     methods: {
         testWinax() {
-            exec("taskkill /im WINWORD.exe", () => {
-                console.log("testWinax1");
-                const app = new winax.Object("Word.Application");
-                console.log("testWinax2");
-                app.visible = false;
-                console.log("testWinax3");
-                app.visible = true;
-                console.log("testWinax4");/*
-                const x = user32.FindWindowA(null, "Word");
-                console.log("FindWindow returns:", x);
-                */
-            })
+            // const app = new winax.Object("Word.Application");
+            // app.visible = true;
+            /*
+            const x = user32.FindWindowA(null, "Word");
+            console.log("FindWindow returns:", x);
+            */
         },
+        initDoc() {
+            const doc = app.documents.open(path1, true, true, false);
+            range(50).forEach(n => {
+                app.selection.endKey(WD.wdStory)
+                app.selection.paragraphs.add()
+                const cc = doc.contentControls.add(WD.wdContentControlText)
+                cc.range = " ";
+                cc.tag = cc.title = `test-cc-${n + 1}`;
+                cc.lockContents = cc.LockContentControl = true
+            })
+            doc.save(WD.WdSaveOptions.wdSaveChanges)
+        },
+        fillCCsInDoc() {
+            const doc = app.documents.open(path2, true, true, false);
+            console.log("start")
+            toArray(doc.contentControls).forEach(cc => {
+                cc.lockContents = false
+                cc.range = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
+                cc.lockContents = true
+            })
+            console.log("end")
+            doc.close(WD.WdSaveOptions.wdDoNotSaveChanges)
+        },
+        fillCCsInDoc2() {
+            const doc = app.documents.open(path2, true, true, false);
+            console.log("start")
+            const ccs = range(50).map(n => doc.selectContentControlsByTag(`test-cc-${n + 1}`).item(1));
+            console.log("...")
+            ccs.forEach(cc => {
+                cc.lockContents = false
+                cc.range.font.bold = true
+                cc.range.font.Color = 5
+                cc.range = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
+                cc.lockContents = true
+            })
+            console.log("end")
+            doc.close(WD.WdSaveOptions.wdDoNotSaveChanges)
+        }
+
     },
 };
 </script>
 
 <template>
-    <div class="card">
+    <div>
         <button type="button" @click="testWinax()">TEST WINAX</button>
+        <button type="button" @click="initDoc()">Init Document</button>
+        <button type="button" @click="fillCCsInDoc()">Fill CCs in Document</button>
+        <button type="button" @click="fillCCsInDoc2()">Fill CCs in Document 2</button>
     </div>
 </template>
-
-<style scoped>
-.read-the-docs {
-    color: #888;
-}
-</style>
