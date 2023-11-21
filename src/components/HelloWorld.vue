@@ -1,5 +1,7 @@
 <script lang="ts">
 import { WD } from "../wordConsts"
+// import koffi from 'koffi';
+const koffi = require('koffi/indirect') 
 const path = require('path');
 
 const { execSync } = require("child_process");
@@ -12,15 +14,6 @@ const toArray = (objlist: any) => {
     return res;
 }
 
-
-/*
-const ref = require("ref-napi");
-const ffi = require("ffi-napi");
-
-const voidPtr = ref.refType(ref.types.void);
-const stringPtr = ref.refType(ref.types.CString);
-*/
-
 // const winax = require("./winax/winax-for-electron-16.2.8/winax");  // ok
 // const winax = require("./winax/winax-for-electron-17.4.11/winax"); // ok
 // const winax = require("./winax/winax-for-electron-18.3.15/winax"); // ok 
@@ -32,37 +25,14 @@ const stringPtr = ref.refType(ref.types.CString);
 const winax = require("./winax/winax-for-electron-27.1.0/winax"); // ok
 // const winax = require("winax");
 
-/*const user32 = ffi.Library("user32.dll", {
-    EnumWindows: ["bool", [voidPtr, "int32"]],
-    EnumDesktopWindows: ["bool", ["long", voidPtr, "int32"]],
-    GetWindowTextA: ["long", ["long", stringPtr, "long"]],
-    SetForegroundWindow: ["bool", ["long"]],
-    SetFocus: ["long", ["long"]],
-    ShowWindow: ["bool", ["long", "int32"]],
-    FindWindowA: ['long', ['string', 'string']],
-    BringWindowToTop: ["bool", ["long"]],
-});
+const lib = koffi.load('user32.dll');
+const user32= {
+    FindWindowA: lib.stdcall('FindWindowA', 'long', ['str', 'str'])
 
-const findWindow = (s) => {
-        let n = 0;
-    let res = false;
-    const windowProc = ffi.Callback("bool", ["long", "int32"], (hWnd) => {
-        if (!res) {
-const buf = Buffer.alloc(255, " ");
-            user32.GetWindowTextA(hWnd, buf, 255);
-            const x = buf.toString().trim();
-            if (x) {
-                n++;
-                res = res || x.includes(s);
-            }
-        }
-    });
-    user32.EnumWindows(windowProc, 0);
-    console.log("end", res, n);
-    return res;
 };
-*/
-// console.log("WINAX", winax, ffi, ref, user32);
+
+
+console.log("WINAX", winax, user32);
 
 
 
@@ -77,6 +47,8 @@ app.visible = true;
 export default {
     methods: {
         testWinax() {
+            const x = user32.FindWindowA(null, "Word");
+            console.log("FindWindow returns:", x);
             // const app = new winax.Object("Word.Application");
             // app.visible = true;
             /*
