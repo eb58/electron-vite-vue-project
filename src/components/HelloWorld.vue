@@ -1,18 +1,19 @@
 <script lang="ts">
 const { execSync } = require("child_process");
 const path = require('path');
-
 const koffi = require('koffi')
+
+// const winax = require("winax");
 // const winax = require("./winax/winax-for-electron-16.2.8/winax");  // ok
 // const winax = require("./winax/winax-for-electron-17.4.11/winax"); // ok
 // const winax = require("./winax/winax-for-electron-18.3.15/winax"); // ok 
 // const winax = require("./winax/winax-for-electron-19.1.9/winax");  // ok
 // const winax = require("./winax/winax-for-electron-20.3.8/winax");  // ok
 // const winax = require("./winax/winax-for-electron-22.3.6/winax");  // ok
-// const winax = require("./winax/winax-for-electron-24.1.2/winax"); //ok
-// const winax = require("./winax/winax-for-electron-26.6.0/winax"); // ok
-const winax = require("./winax/winax-for-electron-27.1.0/winax"); // ok
-// const winax = require("winax");
+// const winax = require("./winax/winax-for-electron-24.1.2/winax");  // ok
+// const winax = require("./winax/winax-for-electron-26.6.0/winax");  // ok
+// const winax = require("./winax/winax-for-electron-27.1.0/winax");  // ok
+const winax = require("./winax/winax-for-electron-31.3.1/winax");     // ok
 
 const lib = koffi.load('user32.dll');
 const user32 = {
@@ -22,7 +23,7 @@ const user32 = {
 import { WD } from "../wordConsts"
 
 const range = (n: number) => [...Array(n).keys()]
-const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i))
+const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i + 1))
 
 let app: any;
 
@@ -54,7 +55,7 @@ export default {
             doc.close()
         },
         fillCCsInDoc() {
-            const doc = app.documents.open(path2, true, true, false);
+            const doc = app.documents.open(path2, true, false, false);
             console.log("start")
             toArray(doc.contentControls).forEach(cc => {
                 cc.lockContents = false
@@ -65,19 +66,26 @@ export default {
             doc.close(WD.WdSaveOptions.wdDoNotSaveChanges)
         },
         fillCCsInDoc2() {
-            const doc = app.documents.open(path2, true, true, false);
+            const doc = app.documents.open(path2, true, false, false);
             console.log("start")
-            const ccs = range(50).map(n => doc.selectContentControlsByTag(`test-cc-${n + 1}`).item(1));
+
+            const ccs = toArray(doc.contentControls)
             console.log("...")
             ccs.forEach(cc => {
-                cc.lockContents = false
-                cc.range.font.bold = true
-                cc.range.font.Color = 5
-                cc.range = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
-                cc.lockContents = true
+                const r = cc.range
+                if (r.text !== "test" || r.font.bold) {
+                    console.log("AA", cc.range)
+                    const f = cc.range.font
+                    cc.lockContents = false
+                    f.bold = false
+                    // f.Color = 5
+                    r.text = "test"
+                    cc.lockContents = true
+                }
             })
             console.log("end")
-            doc.close(WD.WdSaveOptions.wdDoNotSaveChanges)
+            doc.save()
+            doc.close()
         }
 
     },

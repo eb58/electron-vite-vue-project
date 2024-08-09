@@ -72,7 +72,6 @@ export default {
 - [C/C++ addons, Node.js modules - Pre-Bundling](https://github.com/electron-vite/vite-plugin-electron-renderer#dependency-pre-bundling)
 - [dependencies vs devDependencies](https://github.com/electron-vite/vite-plugin-electron-renderer#dependencies-vs-devdependencies)
 
-
 ## Testen des Beispielprogramms
 
 ```sh
@@ -80,37 +79,33 @@ npm run dev
 ```
 
 # How to switch to electron version 19.1.9
-	
-	package.json -> devDependencies ->     "electron": "19.1.9",
-	HelloWorld.vue -> const winax = require("./winax/winax-for-electron-19.1.9/winax");
-	npm i
-	npm run devDependencies
 
+ package.json -> devDependencies ->     "electron": "19.1.9",
+ HelloWorld.vue -> const winax = require("./winax/winax-for-electron-19.1.9/winax");
+ npm i
+ npm run devDependencies
 
 # How to switch to electron version  20.3.8
-	
-	package.json -> devDependencies ->     "electron": ""20.3.8"",
-	HelloWorld.vue -> const winax = require("./winax/winax-for-electron-20.3.8/winax");
-	npm i
-	npm run devDependencies
+
+ package.json -> devDependencies ->     "electron": ""20.3.8"",
+ HelloWorld.vue -> const winax = require("./winax/winax-for-electron-20.3.8/winax");
+ npm i
+ npm run devDependencies
 
 # How to switch to electron version  that ist not already compiled and provided in ./winax-folder
 
-First find wanted version in https://releases.electronjs.org/releases/stable for example 27.1.0
+First find wanted version in <https://releases.electronjs.org/releases/stable> for example 27.1.0
+ package.json -> devDependencies ->     "electron": "27.1.0",
+ npm i
+   npm rebuild winax --runtime=electron --target=27.1.0 --dist-url=<https://electronjs.org/headers> --build-from-source
 
-	package.json -> devDependencies ->     "electron": "27.1.0",
-	npm i
-  	npm rebuild winax --runtime=electron --target=27.1.0 --dist-url=https://electronjs.org/headers --build-from-source
-	
-	copy ./winax/winax-for-electron-20.3.8 -> ./winax/winax-for-electron-27.1.0
-	copy from ./node_modules/winax/build/release/node_axtivex.node -> . ./winax/winax-for-electron-27.1.0/build/release/node_axtivex.node
+ copy ./winax/winax-for-electron-20.3.8 -> ./winax/winax-for-electron-27.1.0
+ copy from ./node_modules/winax/build/release/node_axtivex.node -> . ./winax/winax-for-electron-27.1.0/build/release/node_axtivex.node
 
-	HelloWorld.vue -> const winax = require("./winax/winax-for-electron-27.1.0/winax");
+ HelloWorld.vue -> const winax = require("./winax/winax-for-electron-27.1.0/winax");
 
-	npm run dev
+ npm run dev
 
-
-	
 ## Bauen winax für die verschiedenen electron-Versionen
 
 ```bash
@@ -120,4 +115,5 @@ npm rebuild winax --runtime=electron --target=18.3.15 --dist-url=https://electro
 npm rebuild winax --runtime=electron --target=20.3.8  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=22.3.6  --dist-url=https://electronjs.org/headers --build-from-source
 npm rebuild winax --runtime=electron --target=27.1.0  --dist-url=https://electronjs.org/headers --build-from-source
+npm rebuild winax --runtime=electron --target=31.3.1  --dist-url=https://electronjs.org/headers --build-from-source
 ```

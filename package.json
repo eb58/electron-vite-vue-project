@@ -27,7 +27,7 @@
     "winax": "^3.5.3"
   },
   "devDependencies": {
-    "electron": "27.1.0",
+    "electron": "31.3.1",
     "electron-builder": "^24.13.3",
     "typescript": "^5.5.4",
     "vite": "^5.4.0",
