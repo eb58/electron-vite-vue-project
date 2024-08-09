@@ -23,10 +23,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@lwahonen/ffi-napi": "^4.0.12",
-    "@lwahonen/ref-napi": "^4.0.8",
-    "koffi": "^2.6.6",
-    "winax": "^3.3.6"
+    "koffi": "2.9.0",
+    "winax": "^3.5.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",

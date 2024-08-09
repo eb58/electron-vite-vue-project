@@ -1,19 +1,8 @@
 <script lang="ts">
-import { WD } from "../wordConsts"
-// import koffi from 'koffi';
-const koffi = require('koffi/indirect') 
+const { execSync } = require("child_process");
 const path = require('path');
 
-const { execSync } = require("child_process");
-const range = (n: number) => [...Array(n).keys()]
-const toArray = (objlist: any) => {
-    const res = [];
-    for (let i = 1; i <= objlist.Count; i++) {
-        res.push(objlist.Item(i));
-    }
-    return res;
-}
-
+const koffi = require('koffi')
 // const winax = require("./winax/winax-for-electron-16.2.8/winax");  // ok
 // const winax = require("./winax/winax-for-electron-17.4.11/winax"); // ok
 // const winax = require("./winax/winax-for-electron-18.3.15/winax"); // ok 
@@ -26,39 +15,34 @@ const winax = require("./winax/winax-for-electron-27.1.0/winax"); // ok
 // const winax = require("winax");
 
 const lib = koffi.load('user32.dll');
-const user32= {
+const user32 = {
     FindWindowA: lib.stdcall('FindWindowA', 'long', ['str', 'str'])
-
 };
 
+import { WD } from "../wordConsts"
 
-console.log("WINAX", winax, user32);
+const range = (n: number) => [...Array(n).keys()]
+const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i))
 
-
+let app: any;
 
 const path1 = path.resolve("test-data", "test-doc1.docx");
 const path2 = path.resolve("test-data", "test-doc2.docx");
 
 try { execSync("taskkill /f /im WINWORD.exe") } catch (e) { }
-const app = new winax.Object("Word.Application");
-app.visible = true;
-
 
 export default {
     methods: {
         testWinax() {
-            const x = user32.FindWindowA(null, "Word");
+            app = new winax.Object("Word.Application");
+            app.visible = true;
+            const x = user32.FindWindowA(null, "Microsoft Word");
             console.log("FindWindow returns:", x);
-            // const app = new winax.Object("Word.Application");
-            // app.visible = true;
-            /*
-            const x = user32.FindWindowA(null, "Word");
-            console.log("FindWindow returns:", x);
-            */
+
         },
         initDoc() {
-            const doc = app.documents.open(path1, true, true, false);
-            range(50).forEach(n => {
+            const doc = app.documents.open(path1, true, false, false);
+            range(5).forEach(n => {
                 app.selection.endKey(WD.wdStory)
                 app.selection.paragraphs.add()
                 const cc = doc.contentControls.add(WD.wdContentControlText)
@@ -66,7 +50,8 @@ export default {
                 cc.tag = cc.title = `test-cc-${n + 1}`;
                 cc.lockContents = cc.LockContentControl = true
             })
-            doc.save(WD.WdSaveOptions.wdSaveChanges)
+            doc.save()
+            doc.close()
         },
         fillCCsInDoc() {
             const doc = app.documents.open(path2, true, true, false);

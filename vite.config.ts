@@ -15,7 +15,7 @@ export default defineConfig(({ command }) => {
 
   return {
     optimizeDeps: {
-      exclude: ["fsevents"],
+      exclude: ["koffi", "winax"],
     },
     plugins: [
       vue(),
