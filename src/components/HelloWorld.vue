@@ -20,8 +20,6 @@ const user32 = {
     FindWindowA: lib.stdcall('FindWindowA', 'long', ['str', 'str'])
 };
 
-import { WD } from "../wordConsts"
-
 const range = (n: number) => [...Array(n).keys()]
 const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i + 1))
 
@@ -45,9 +43,9 @@ export default {
         initDoc() {
             const doc = app.Documents.Open(path1, true, false, false);
             range(5).forEach(n => {
-                app.Selection.EndKey(WD.wdStory)
+                app.Selection.EndKey(Word.WdUnits.wdStory)
                 app.Selection.Paragraphs.Add()
-                const cc = doc.ContentControls.Add(WD.wdContentControlText)
+                const cc = doc.ContentControls.Add( Word.WdContentControlType.wdContentControlText)
                 cc.Range.Text = " ";
                 cc.Tag = cc.Title = `test-cc-${n + 1}`;
                 cc.LockContents = cc.LockContentControl = true
@@ -64,18 +62,19 @@ export default {
                 cc.LockContents = true
             })
             console.log("end")
-            doc.Close(WD.WdSaveOptions.wdDoNotSaveChanges)
+            doc.Save()
+            doc.Close()
         },
         fillCCsInDoc2() {
             const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
             toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
                 const r: Word.Range = cc.Range
-                if (r.Text !== "test" || r.Font.Bold) {
-                    console.log("AA", cc.Range.Text)
-                    const f = cc.Range.Font
+                if (r.Text !== "test" ) {
+                    // console.log("AA", cc.Range.Text)
                     cc.LockContents = false
-                    f.Bold = false
+                    // f = cc.Range.Font
+                    // f.Bold = false
                     // f.Color = 5
                     r.Text = "test"
                     cc.LockContents = true
