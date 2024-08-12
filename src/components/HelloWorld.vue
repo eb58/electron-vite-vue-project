@@ -69,14 +69,10 @@ export default {
             const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
             toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
-                const r: Word.Range = cc.Range
-                if (r.Text !== "test" ) {
-                    // console.log("AA", cc.Range.Text)
+                if (cc.Range.Text !== "test" ) {
                     cc.LockContents = false
-                    // f = cc.Range.Font
-                    // f.Bold = false
-                    // f.Color = 5
-                    r.Text = "test"
+                    // cc.Range.Font.Bold = false
+                    cc.Range.Text = "test"
                     cc.LockContents = true
                 }
             })
