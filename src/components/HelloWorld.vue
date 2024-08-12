@@ -25,7 +25,7 @@ import { WD } from "../wordConsts"
 const range = (n: number) => [...Array(n).keys()]
 const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i + 1))
 
-let app: any;
+let app: Word.Application;
 
 const path1 = path.resolve("test-data", "test-doc1.docx");
 const path2 = path.resolve("test-data", "test-doc2.docx");
@@ -35,59 +35,56 @@ try { execSync("taskkill /f /im WINWORD.exe") } catch (e) { }
 export default {
     methods: {
         testWinax() {
+
             app = new winax.Object("Word.Application");
-            app.visible = true;
+            app.Visible = true;
             const x = user32.FindWindowA(null, "Microsoft Word");
             console.log("FindWindow returns:", x);
 
         },
         initDoc() {
-            const doc = app.documents.open(path1, true, false, false);
+            const doc = app.Documents.Open(path1, true, false, false);
             range(5).forEach(n => {
-                app.selection.endKey(WD.wdStory)
-                app.selection.paragraphs.add()
-                const cc = doc.contentControls.add(WD.wdContentControlText)
-                cc.range = " ";
-                cc.tag = cc.title = `test-cc-${n + 1}`;
-                cc.lockContents = cc.LockContentControl = true
+                app.Selection.EndKey(WD.wdStory)
+                app.Selection.Paragraphs.Add()
+                const cc = doc.ContentControls.Add(WD.wdContentControlText)
+                cc.Range.Text = " ";
+                cc.Tag = cc.Title = `test-cc-${n + 1}`;
+                cc.LockContents = cc.LockContentControl = true
             })
-            doc.save()
-            doc.close()
+            doc.Save()
+            doc.Close()
         },
         fillCCsInDoc() {
-            const doc = app.documents.open(path2, true, false, false);
+            const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
-            toArray(doc.contentControls).forEach(cc => {
-                cc.lockContents = false
-                cc.range = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
-                cc.lockContents = true
+            toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
+                cc.LockContents = false
+                cc.Range.Text = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
+                cc.LockContents = true
             })
             console.log("end")
-            doc.close(WD.WdSaveOptions.wdDoNotSaveChanges)
+            doc.Close(WD.WdSaveOptions.wdDoNotSaveChanges)
         },
         fillCCsInDoc2() {
-            const doc = app.documents.open(path2, true, false, false);
+            const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
-
-            const ccs = toArray(doc.contentControls)
-            console.log("...")
-            ccs.forEach(cc => {
-                const r = cc.range
-                if (r.text !== "test" || r.font.bold) {
-                    console.log("AA", cc.range)
-                    const f = cc.range.font
-                    cc.lockContents = false
-                    f.bold = false
+            toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
+                const r: Word.Range = cc.Range
+                if (r.Text !== "test" || r.Font.Bold) {
+                    console.log("AA", cc.Range.Text)
+                    const f = cc.Range.Font
+                    cc.LockContents = false
+                    f.Bold = false
                     // f.Color = 5
-                    r.text = "test"
-                    cc.lockContents = true
+                    r.Text = "test"
+                    cc.LockContents = true
                 }
             })
             console.log("end")
-            doc.save()
-            doc.close()
+            doc.Save()
+            doc.Close()
         }
-
     },
 };
 </script>
