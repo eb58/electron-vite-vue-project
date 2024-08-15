@@ -21,7 +21,14 @@ const user32 = {
 };
 
 const range = (n: number) => [...Array(n).keys()]
-const toArray = (objlist: any) => range(objlist.Count).map((i) => objlist.Item(i + 1))
+const toArray = (objlist: any): any[] => range(objlist.Count).map((i) => objlist.Item(i + 1))
+const ccAction = (_: Word.ContentControl): void => { }
+
+const handleLock = (cc: Word.ContentControl, action: typeof ccAction): void => {
+    const keepLock = cc.LockContents;
+    cc.LockContents = false;
+    try { action(cc) } finally { cc.LockContents = keepLock; }
+}
 
 let app: Word.Application;
 
@@ -29,6 +36,8 @@ const path1 = path.resolve("test-data", "test-doc1.docx");
 const path2 = path.resolve("test-data", "test-doc2.docx");
 
 try { execSync("taskkill /f /im WINWORD.exe") } catch (e) { }
+
+
 
 export default {
     methods: {
@@ -45,7 +54,7 @@ export default {
             range(5).forEach(n => {
                 app.Selection.EndKey(Word.WdUnits.wdStory)
                 app.Selection.Paragraphs.Add()
-                const cc = doc.ContentControls.Add( Word.WdContentControlType.wdContentControlText)
+                const cc = doc.ContentControls.Add(Word.WdContentControlType.wdContentControlText)
                 cc.Range.Text = " ";
                 cc.Tag = cc.Title = `test-cc-${n + 1}`;
                 cc.LockContents = cc.LockContentControl = true
@@ -56,11 +65,8 @@ export default {
         fillCCsInDoc() {
             const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
-            toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
-                cc.LockContents = false
-                cc.Range.Text = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB rt j vkljfglkfjgklfd jglkfjk fjglk fjkjg ggfjkglfj gkfgf gkfjgk lfjgklfj gklfgklfj"
-                cc.LockContents = true
-            })
+            const ccs = toArray(doc.ContentControls);
+            ccs.forEach((cc) => handleLock(cc, (c: any) => c.Range.Text = "BBBBBBBBBBBBBB"))
             console.log("end")
             doc.Save()
             doc.Close()
@@ -68,13 +74,12 @@ export default {
         fillCCsInDoc2() {
             const doc = app.Documents.Open(path2, true, false, false);
             console.log("start")
-            toArray(doc.ContentControls).forEach((cc: Word.ContentControl) => {
-                if (cc.Range.Text !== "test" ) {
-                    cc.LockContents = false
-                    // cc.Range.Font.Bold = false
-                    cc.Range.Text = "test"
-                    cc.LockContents = true
-                }
+            const ccs = toArray(doc.ContentControls)
+            ccs.forEach((cc: Word.ContentControl) => {
+                if (cc.Range.Text !== "test") handleLock(cc, (c) => {
+                    // c.Range.Font.Bold = false
+                    c.Range.Text = "test";
+                })
             })
             console.log("end")
             doc.Save()
